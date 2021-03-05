@@ -1,0 +1,108 @@
+clear;
+clc;
+close all;
+
+dataFolderPath = 'UCRArchive_2018/';
+datasetName =  'BeetleFly';
+algoNm = 'DTW';
+
+datasetPath_Train = strcat(dataFolderPath, datasetName, '/', datasetName, '_TRAIN.tsv');
+datasetPath_Test = strcat(dataFolderPath, datasetName, '/', datasetName, '_TEST.tsv');
+
+Load_UCR_Data(datasetPath_Train, datasetPath_Test, algoNm)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The following function is taken from : https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/BriefingDocument2018.pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function Load_UCR_Data(trainData, testData, algoNm)
+
+TRAIN = load(trainData); % Only these two lines need to be changed to test a different dataset %
+TEST  = load(testData); % Only these two lines need to be changed to test a different dataset %
+
+
+TRAIN_class_labels = TRAIN(:,1);    % Pull out the class labels.
+TRAIN(:,1) = [];                    % Remove class labels from training set.
+TEST_class_labels = TEST(:,1);      % Pull out the class labels.
+TEST(:,1) = [];                     % Remove class labels from testing set.
+correct = 0; % Initialize the number we got correct
+
+for i = 1 :1:length(TEST_class_labels) % Loop over every instance in the test set ************** Change here
+    classify_this_object = TEST(i,:);
+    this_objects_actual_class = TEST_class_labels(i);
+    [~,predicted_class] = Classification_Algorithm(TRAIN,TRAIN_class_labels, classify_this_object,algoNm);   
+    
+    if predicted_class == this_objects_actual_class
+        correct = correct + 1;
+    end
+    disp([int2str(i), ' out of ', int2str(length(TEST_class_labels)), ' done']) % Report progress
+end
+
+disp(['The dataset you tested has ', int2str(length(unique(TRAIN_class_labels))), ' classes'])
+disp(['The training set is of size ', int2str(size(TRAIN,1)),', and the test set is of size ',int2str(size(TEST,1)),'.'])
+disp(['The time series are of length ', int2str(size(TRAIN,2))])
+disp(['The error rate was ',num2str((length(TEST_class_labels)-correct )/length(TEST_class_labels))])
+
+return;
+
+end
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here is a sample classification algorithm (Case: Otherwise), it is the simple (yet very competitive) one-nearest
+% neighbor using the Euclidean distance.
+
+% If you are advocating a new distance measure you just need to change the line marked "Euclidean distance"
+% Some portion of this code is taken from : https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/BriefingDocument2018.pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [distKeepingArr,predicted_class] = Classification_Algorithm(TRAIN,TRAIN_class_labels,unknown_object,Technique)
+best_so_far = inf;
+distKeepingArr = Inf(length(TRAIN_class_labels),1);
+for i = 1 : 1 % length(TRAIN_class_labels)  %  change here ***************
+    compare_to_this_object = TRAIN(i,:);
+    
+    % compare_to_this_object  => testSample
+    % unknown_object  => refSample
+    switch Technique
+        case 'DTW'  % Algo - 1
+            [distance] = DynamicTimeWarping(unknown_object,compare_to_this_object);
+        case 'DDTW'   % Algo - 2
+            [distance] = Derivative_DynamicTimeWarping(unknown_object,compare_to_this_object);
+        case 'Value_Derivative'   % Algo - 3
+            [distance] = ValueDerivative_DTW(unknown_object,compare_to_this_object);
+        case 'Weighted_Hybrid_DTW'   % Algo - 4
+            [distance] = WeightedHybrid_DTW(unknown_object,compare_to_this_object);
+        case 'Itekura'   % Algo - 5
+            [distance] = DynamicTimeWarping_Itakura_Band(unknown_object,compare_to_this_object);
+        case 'CDP2'   % Algo - 6
+            [~,~,distance] = cdp_2(unknown_object,compare_to_this_object);
+        case 'LDTW'   % Algo - 7
+            [distance,~,~] = DynamicTimeWarping_VariousWarpingPath(unknown_object,compare_to_this_object,3,'LDTW');
+        case 'LDTW_Itekura'   % Algo - 8
+            [distance,~,~] = DynamicTimeWarping_VariousWarpingPath(unknown_object,compare_to_this_object,5,'LDTW');
+            if(distVal == -5)
+                [distance,~,~] = DynamicTimeWarping_VariousWarpingPath(unknown_object,compare_to_this_object,3,'LDTW');
+            end
+        case 'SSDTW'   % Algo - 9
+            [distance,~,~] = subsequenceDynamicTimeWarping(unknown_object,compare_to_this_object);
+        case 'Sin_Transform'   % Algo - 10
+            [distance] = IsometricTransformDTW(unknown_object,compare_to_this_object,'sine');
+        case 'Cos_Transform'   % Algo - 11
+            [distance] = IsometricTransformDTW(unknown_object,compare_to_this_object,'cos');
+        case 'Hilbert_Transform'   % Algo - 12
+            [distance] = IsometricTransformDTW(unknown_object,compare_to_this_object,'hilbert');
+        case 'MVM'   % Algo - 13
+            [~,~,~,~,distance] = MinimalVarianceMatching(compare_to_this_object,unknown_object);
+        otherwise
+            distance = sqrt(sum((compare_to_this_object - unknown_object).^2)); % Euclidean distance
+    end
+    distKeepingArr(i,1) = distance;
+    if distance < best_so_far
+        predicted_class = TRAIN_class_labels(i);
+        best_so_far = distance;
+    end
+end
+end
