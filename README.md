@@ -110,11 +110,18 @@ The implementation can be found in :
 <br/>
 
 <h4> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.1 &nbsp; Sine Transform : </h4>
-<img align="center" src="imgs/sin.png" width="310"/> 
+<p align="center">
+  <img  width="310" src="imgs/sin.png">
+</p>
+
 <h4> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.2 &nbsp; Cosine Transform : </h4>
-<img align="center" src="imgs/cosine.png" width="310"/> 
+<p align="center">
+  <img  width="310" src="imgs/cosine.png">
+</p>
 <h4> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.3 &nbsp; Hilbert transform : </h4>
-<img align="center" src="imgs/hilbert.png" width="110"/> 
+<p align="center">
+  <img  width="210" src="imgs/hilbert.png">
+</p>
 
  
   
