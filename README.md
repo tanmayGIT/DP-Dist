@@ -120,7 +120,7 @@ The implementation can be found in :
 </p>
 <h4> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.3 &nbsp; Hilbert transform : </h4>
 <p align="center">
-  <img  width="210" src="imgs/hilbert.png">
+  <img  width="150" src="imgs/hilbert.png">
 </p>
 
  
