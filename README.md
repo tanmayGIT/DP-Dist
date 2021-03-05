@@ -176,16 +176,18 @@ The implementation can be found in :
 
 
 ```matlab
-- WeightedHybrid_DTW(Data_Ref,Data_Target)
+- WeightedDynamicTimeWarping(refSample,testSample,tip)
 ```
 <br/>
 <h3> 7.  &nbsp; Weighted Derivative Dynamic Time Warping (WDDTW)  </h3>
 <br/>
-
-The idea of weighted dynamic time warping can be extended to variants of DTW, for example the idea of derivative dynamic time warping can be extended to it's weighted version, which is named as Weighted Derivative Dynamic Time Warping (WDDTW).	 
+<div style="padding-left: 30px;">
+  The idea of weighted dynamic time warping can be extended to variants of DTW, for example the idea of derivative dynamic time warping can be extended to it's weighted version, which is named as Weighted Derivative Dynamic Time Warping (WDDTW).	 
 </div>
 <br/>
+<div style="padding-left: 30px;">
 For more details, see : 
+</div>
 
 - `Jeong, Y. S., Jeong, M. K., & Omitaomu, O. A. (2011). Weighted dynamic time warping for time series classification. Pattern Recognition, 44(9), 2231–2240.`
 <br/>
@@ -196,5 +198,143 @@ The implementation can be found in :
 
 
 ```matlab
-- WeightedHybrid_DTW(Data_Ref,Data_Target)
+- Weighted_Derivative_DynamicTimeWarping(Data_Ref,Data_Target,tip)
 ```
+
+<br/>
+<h3> 8.  &nbsp; Piecewise DTW (PDTW)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+	Most time series data can be efficiently approximated by piecewise aggregates, so that DTW can operate on higher level of data. The main idea of PDTW is to reduce the size of original signal by capturing the significant representations of the full signal through sub-sampling technique.  
+</div>
+<br/>
+<div style="padding-left: 30px;">
+For more details, see : 
+</div>
+
+- `Eamonn J. Keogh, M. J. P. (2000). Scaling up dynamic time warping for datamining applications. KDD, 285–289.`
+<br/>
+
+<div style="padding-left: 30px;">
+<br/>
+The implementation can be found in :
+</div>
+
+
+```matlab
+- PAA_PDTW(Data_Ref,Data_Target,avgWidth)
+```
+
+<br/>
+<h3> 9.  &nbsp; Piecewise Derivative DTW (PDDTW)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+  The Piecewise Derivative Dynamic Time Warping (PDDTW), uses at the same time the derivative of the signal in order to reduce singularities and data abstraction for capturing the benefits of both PDTW and DDTW together. In order to align two sequences X and Y, a reduced dimensional series are obtained first. Then the **DDTW** on these reduced dimensional time series.
+</div>
+<br/>
+<div style="padding-left: 30px;">
+For more details, see : 
+</div>
+
+- `Zifan, A., Saberi, S., Moradi, M. H., & Towhidkhah, F. (2007). Automated ECG Segmentation Using Piecewise Derivative Dynamic Time Warping. International Journal of Medical, Health, Pharmaceutical and Biomedical Engineering, 1(3), 764–768.`
+<br/>
+
+<div style="padding-left: 30px;">
+<br/>
+The implementation can be found in :
+</div>
+
+
+```matlab
+- PeicewiseDerivative_DynamicTimeWarping(Data_Ref,Data_Target,avgWidth)
+```
+
+<br/>
+<h3> 10.  &nbsp; Subsequence DTW (SSDTW)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+  This algorithm can find a continuous subsequence that would optimally match the shorter query sequence.
+</div>
+<br/>
+<div style="padding-left: 30px;">
+<br/>
+For more details, see : 
+</div>
+
+- `Albrecht, T. (2009). Dynamic Time Warping (DTW). 69–85.`
+<br/>
+
+<div style="padding-left: 30px;">
+<br/>
+The implementation can be found in :
+</div>
+
+
+```matlab
+- SubsequenceDynamicTimeWarping(refSample,testSample)
+```
+
+<br/>
+<h3> 11.  &nbsp; Meshesha-Jawahar DTW (MJ-DTW)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+  When targets that differ from reference, in terms of prefixes and suffixes, the warping path can deviate (from diagonal) in horizontal or in vertical directions at the beginning or at end. Such situation can significantly increases the matching cost and can disturb the matching for the corresponding part of the target and reference signals. To avoid such behavior, a DTW based partial sequence matching technique, dedicated to word spotting, for handling the variations at the beginning and at the end of the sequences. To reduce unwanted extra cost, MJ-DTW first analyzes whether the dissimilarity between words is concentrated at the end, at the beginning or both. Then, the extra cost at the two extremes are removed to reduce the total matching score and to obtain the optimal dissimilarity value.
+</div>
+<br/>
+<div style="padding-left: 30px;">
+<br/>
+For more details, see : 
+</div>
+
+- `Meshesha, M., & Jawahar, C. V. (2008). Matching word images for content-based retrieval from printed document images. IJDAR, 11(1), 29–38.`
+<br/>
+
+<div style="padding-left: 30px;">
+<br/>
+The implementation can be found in :
+</div>
+
+
+```matlab
+- DTW_Jahawar(refSample,testSample)
+```
+
+<br/>
+<h3> 12.  &nbsp; DTW with Correspondence Window (DTW-CW)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+  When a query sequence has to be matched with a subsequence of a target sequence, the matching can be performed by using a sliding correspondence window, having same length as query, and an overlapping. The position of optimal subsequence within the target sequence is obtained by calculating DTW distance inside each window position over a query sequence. Consequently, DTW-CW is computationally expensive and choosing the overlapping parameter could also be troublesome for some applications. 
+</div>
+<br/>
+<div style="padding-left: 30px;">
+<br/>
+For more details, see : 
+</div>
+
+- `Latecki, L. J., Koknar-tezel, S., Wang, Q., & Megalooikonomou, V. (2007). Sequence Matching Capable of Excluding Outliers. Int. Conf. on Knowledge Discovery and Data Mining (KDD).`
+<br/>
+
+<div style="padding-left: 30px;">
+<br/>
+The implementation can be found in :
+</div>
+
+
+```matlab
+- DynamicTimeWarping_CW(refSample,testSample,avgCharWidth)
+```
+<br/>
+
+<h3> 13.  &nbsp; Longest Common Sub-sequence (LCSS)  </h3>
+<br/>
+<div style="padding-left: 30px;">
+	The Longest Common Subsequence dissimilarity measure is an algorithm based on Edit Distance or Levenshtein Distance. 
+	The basic idea is to match corresponding elements, keeping the order and allowing some elements to be unmatched or left out (e.g. outliers).
+	The LCSS measure has two parameters. 
+	The first constant is usually needed set to a percentage of the sequence length, which is a constrained window size for matching a given point from one sequence to a point in another sequence. 
+	It controls how far in time, we can go in order to match a given point from one trajectory to a point in another trajectory. 
+	The second constant is the matching threshold: two points from two sequences can be matched, if their distance is less than a given threshold. 
+	The performance of LCSS highly depends on the correct setting of this threshold, which may be a difficult problem for some applications.
+  By considering the ratio between length of the calculated longest common subsequence and that of whole sequence, the dissimilarity between query and target sequence is calculated. Since the inherent goal of finding longest common subsequence is to find optimal substructure between two compared sequences, the problem of LCSS is often solved with dynamic programming.  
+</div>
+<br/>
